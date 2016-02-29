@@ -32,15 +32,20 @@ class Josh_Remote_Recent_Posts extends WP_Widget {
 	 * @param array $instance Settings for the current Recent Posts widget instance.
 	 */
 	public function widget( $args, $instance ) {
+		$query_class = new JP_Remote_Post_Widget_Query( josh_remote_post_widget_cache_key( $instance ) );
+		echo $query_class->get_html();
+		return;
 		if ( ! isset( $args['widget_id'] ) ) {
 			$args['widget_id'] = $this->id;
 		}
 		$cache_time = ( ! empty( $instance['cache_time'] ) ) ? absint( $instance['cache_time'] ) : 5;
+
 		$cache_key = md5( __CLASS__ . implode( $args ) );
 		if( 0 < $cache_time && false != ($cached = get_transient( $cache_key ) ) ){
 			echo $cached;
 			return;
 		}
+
 		ob_start();
 		$title = ( ! empty( $instance['title'] ) ) ? $instance['title'] : __( 'Recent Posts', 'josh-remote-recent-posts' );
 
